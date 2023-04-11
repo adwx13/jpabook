@@ -1,0 +1,21 @@
+#test의 yml에 h2 memory타입으로 설정하여 테스트 확인할 수 있음
+spring:
+#  해당 내용은 스프링에서 자동으로 설정해주기때문에 별도로 적용해주지 않아도 됨
+#  datasource:
+#    url: jdbc:h2:mem:test
+#    username: sa
+#    password:
+#    driver-class-name: org.h2.Driver
+#
+#  jpa:
+#    hibernate:
+#      ddl-auto: create
+#    properties:
+#      hibernate:
+#        show_sql: true
+#        format_sql: true
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.hibernate.type: trace
