@@ -12,6 +12,7 @@ import pri.sungjin.jpabook.domain.item.Item;
 import pri.sungjin.jpabook.repository.ItemRepository;
 import pri.sungjin.jpabook.repository.MemberRepository;
 import pri.sungjin.jpabook.repository.OrderRepository;
+import pri.sungjin.jpabook.repository.OrderSearch;
 
 import java.util.List;
 
@@ -67,9 +68,9 @@ public class OrderService {
 
 
     //검색
-//    public List<Order> findOrders(OrderSearch orderSearch) {
-//        return orderRepository.findAll(orderSearch);
-//    }
+    public List<Order> findOrders(OrderSearch orderSearch) {
+        return orderRepository.findAllByString(orderSearch);
+    }
 
 
 }
