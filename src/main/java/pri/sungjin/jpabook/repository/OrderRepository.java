@@ -66,4 +66,26 @@ public class OrderRepository {
         }
         return query.getResultList();
     }
+
+    public List<Order> findAllWithMemberDelivery() {
+        return em.createQuery(
+                "select o from Order o"+
+                " join fetch o.member m"+
+                " join fetch o.delivery d", Order.class).getResultList();
+
+    }
+
+    /**
+     * 해당 메소드는 DTO를 반환하는 메소드로
+     * 별도 repository에 만드는 것이 좋다
+     * -> repository.order.simplequery.OrderSimpleQueryRepository repository를 만들어서 거기에다가 관리
+     * OrderRepository는 entity만 관리하는 로직이 남아있도록 하기위해
+     */
+    public List<OrderSimpleQueryDto> findOrderDtos() {
+        return em.createQuery(
+                "select new pri.sungjin.jpabook.repository.OrderSimpleQueryDto(o.id, m.name, o.orderDate, o.status, d.address) from Order o"+
+                        " join o.member m"+
+                        " join o.delivery d", OrderSimpleQueryDto.class).getResultList();
+    }
+
 }

@@ -1,5 +1,6 @@
 package pri.sungjin.jpabook.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -25,5 +26,6 @@ public class Member {
     //해당 컬렉션의 내용은 변경하지 않도록 한다 -> 영속화할 때 hibernate가 사용하는 컬렉션형태로 변경하기때문에 소스로 변경을 일으키면
     //하이버네이트가 정상동작하지 않는다.
     @OneToMany(mappedBy = "member")
+    @JsonIgnore
     private List<Order> orders = new ArrayList<>();
 }
