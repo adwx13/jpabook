@@ -12,6 +12,9 @@ spring:
       hibernate:
         show_sql: false
         format_sql: true
+        default_batch_fetch_size: 100
+        #쿼리로 컬렉션을 가져올 때 여러번 나누어 쿼리를 호출하지 않고 미리 in쿼리를 이용해서 다른 데이터들도 불러오도록 만듦
+        #사이즈는 100~1000개까지가 적당하다
 
 logging:
   level:

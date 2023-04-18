@@ -88,4 +88,33 @@ public class OrderRepository {
                         " join o.delivery d", OrderSimpleQueryDto.class).getResultList();
     }
 
+    /**
+     * distinct를 넣으면 중복된 데이터를 제거해주는데 현재 넣지않아도 중복제거를 해주는 상황
+     * -> 현재(컬렉션 페치조인)의 경우 페이징처리가 안된다. 쿼리에 limit, offset을 넣지않고 메모리로 다불러와서 갯수만큼 던져줌
+     */
+    public List<Order> findAllWithItem() {
+        return em.createQuery("select distinct o from Order o" +
+                " join fetch o.member m" +
+                " join fetch o.delivery d" +
+                " join fetch o.orderItems oi" +
+                " join fetch oi.item i", Order.class)
+                .setFirstResult(1)
+                .setMaxResults(100)
+                .getResultList();
+
+    }
+
+    /**
+     * xToOne관계의 필드는 페치조인으로 가져오며 그외에 컬렉션은 batch_fetch_size 설정을 통해서 해결할 수 있다.(글로벌설정)
+     * 개별설정의 경우 @BatchSize 어노테이션 사용
+     */
+    public List<Order> findAllWithMemberDelivery(int offset, int limit) {
+        return em.createQuery(
+                "select o from Order o"+
+                        " join fetch o.member m"+
+                        " join fetch o.delivery d", Order.class)
+                .setFirstResult(offset)
+                .setMaxResults(limit)
+                .getResultList();
+    }
 }
