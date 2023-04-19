@@ -12,9 +12,12 @@ spring:
       hibernate:
         show_sql: false
         format_sql: true
-        default_batch_fetch_size: 100
         #쿼리로 컬렉션을 가져올 때 여러번 나누어 쿼리를 호출하지 않고 미리 in쿼리를 이용해서 다른 데이터들도 불러오도록 만듦
         #사이즈는 100~1000개까지가 적당하다
+        default_batch_fetch_size: 100
+#    osiv는 영속 범위를 어디까지로 해줄지 결정하는 것으로 service에서 데이터를 가지고 나왔을 때 영속상태를 유지하도록 하는것이다(지연로딩 사용을 도와줌)
+#    이는 Database connection을 계속 유지하고 있으므로 리소스가 더 들게된다.
+#    open-in-view: false
 
 logging:
   level:

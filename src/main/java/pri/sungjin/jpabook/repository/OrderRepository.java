@@ -1,11 +1,16 @@
 package pri.sungjin.jpabook.repository;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 import pri.sungjin.jpabook.domain.Order;
+import pri.sungjin.jpabook.domain.OrderStatus;
+import pri.sungjin.jpabook.domain.QMember;
+import pri.sungjin.jpabook.domain.QOrder;
 
 import java.util.List;
 
@@ -65,6 +70,37 @@ public class OrderRepository {
             query = query.setParameter("name", orderSearch.getMemberName());
         }
         return query.getResultList();
+    }
+
+    public List<Order> findAllUsingQueryDsl(OrderSearch orderSearch) {
+        QOrder order = QOrder.order;
+        QMember member = QMember.member;
+
+        JPAQueryFactory query = new JPAQueryFactory(em);
+
+        return query
+                .select(order)
+                .from(order)
+                .join(order.member, member)
+                .where(statusEq(orderSearch.getOrderStatus()), nameLike(orderSearch))
+                .limit(1000)
+                .fetch();
+
+    }
+
+    private BooleanExpression nameLike(OrderSearch orderSearch) {
+        if (!StringUtils.hasText(orderSearch.getMemberName())) {
+            return null;
+        }
+        return QMember.member.name.like(orderSearch.getMemberName());
+    }
+
+    //동적쿼리를 위해서 해당 함수 사용
+    private BooleanExpression statusEq(OrderStatus statusCond) {
+        if (statusCond == null) {
+            return null;
+        }
+        return QOrder.order.status.eq(statusCond);
     }
 
     public List<Order> findAllWithMemberDelivery() {
